@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="theme-color" content="#E8EBF2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10141F" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2732%27%20r%3D%2730%27%20fill%3D%27%23D23B2B%27/%3E%3Ctext%20x%3D%2732%27%20y%3D%2745%27%20font-size%3D%2736%27%20text-anchor%3D%27middle%27%20fill%3D%27%23fff%27%20font-family%3D%27serif%27%3E%E7%A5%9D%3C/text%3E%3C/svg%3E">
+<title>なんでも一つ買ってあげる券（テスト用）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&family=Yuji+Syuku&display=swap">
+<style>
+/* standalone page: the base the hosting shell used to supply */
+html { color-scheme: light; padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+:root {
+  /* Layout: one phone-width column. A greeting, then a paper ticket lying on a tinted desk.
+     The action sits under the ticket; while the countdown runs, the timer and the camera
+     button stick to the bottom edge. */
+  --ground: #E8EBF2;
+  --fg: #17181F;
+  --fg-soft: #4B5268;
+  --surface: #FFFFFF;
+  --hairline: rgba(23, 24, 31, 0.16);
+  --btn-bg: #223A70;
+  --btn-fg: #FFFFFF;
+  --btn-ghost-fg: #223A70;
+  --btn-ghost-line: #223A70;
+  --alert: #B3271B;
+  --lift: 0 1px 2px rgba(23, 24, 31, 0.1), 0 20px 36px -20px rgba(34, 58, 112, 0.5);
+  --dock-shade: 0 -14px 28px -18px rgba(23, 24, 31, 0.35);
+  /* The ticket is paper: it keeps its own inks in both themes. */
+  --paper: #FFFFFF;
+  --ink: #17181F;
+  --ai: #223A70;
+  --shu: #D23B2B;
+  --well: #EEF0F5;
+  --fade-0: rgba(255, 255, 255, 0);
+  --fade-1: rgba(255, 255, 255, 0.5);
+  --font-ticket: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  --font-hand: "Yuji Syuku", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  --font-ui: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #10141F;
+    --fg: #ECEEF4;
+    --fg-soft: #A9B0C4;
+    --surface: #1B2131;
+    --hairline: rgba(236, 238, 244, 0.18);
+    --btn-bg: #E9ECF5;
+    --btn-fg: #16203D;
+    --btn-ghost-fg: #DCE2F3;
+    --btn-ghost-line: #8793B5;
+    --alert: #FF9485;
+    --lift: 0 1px 2px rgba(0, 0, 0, 0.5), 0 20px 36px -20px rgba(0, 0, 0, 0.8);
+    --dock-shade: 0 -14px 28px -18px rgba(0, 0, 0, 0.7);
+    --paper: #F6F5F1;
+    --well: #E9EBF0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #10141F;
+  --fg: #ECEEF4;
+  --fg-soft: #A9B0C4;
+  --surface: #1B2131;
+  --hairline: rgba(236, 238, 244, 0.18);
+  --btn-bg: #E9ECF5;
+  --btn-fg: #16203D;
+  --btn-ghost-fg: #DCE2F3;
+  --btn-ghost-line: #8793B5;
+  --alert: #FF9485;
+  --lift: 0 1px 2px rgba(0, 0, 0, 0.5), 0 20px 36px -20px rgba(0, 0, 0, 0.8);
+  --dock-shade: 0 -14px 28px -18px rgba(0, 0, 0, 0.7);
+  --paper: #F6F5F1;
+  --well: #E9EBF0;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  background: var(--ground);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-text-size-adjust: 100%;
+}
+
+.page {
+  max-width: 480px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  padding-block: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- greeting ---------- */
+.greeting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.greeting__mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--shu);
+  color: var(--paper);
+  font-family: var(--font-hand);
+  font-size: 24px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  transform: rotate(-6deg);
+}
+.greeting__title {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: clamp(28px, 9vw, 42px);
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  padding-left: 0.08em;
+  white-space: nowrap;
+}
+.greeting__sub {
+  margin: 0;
+  color: var(--fg-soft);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- ticket ---------- */
+.ticket {
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ai);
+  padding: 4px;
+  box-shadow: var(--lift);
+  font-family: var(--font-ticket);
+  scroll-margin-top: 12px;
+  overflow: hidden; /* the stamp lands inside the paper and never widens the page */
+}
+.ticket__band {
+  padding: 10px;
+  background:
+    repeating-linear-gradient(45deg, var(--ai) 0, var(--ai) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-45deg, var(--ai) 0, var(--ai) 1px, transparent 1px, transparent 6px);
+}
+.ticket__face {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--ai);
+  padding: 22px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.ticket__kicker {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ai);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.42em;
+}
+.ticket__kicker-text { padding-left: 0.42em; white-space: nowrap; }
+.ticket__rule { flex: 0 1 auto; width: 34px; min-width: 10px; height: 1px; background: var(--ai); }
+.ticket__lead {
+  margin: 0;
+  font-size: clamp(15px, 4.6vw, 21px);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  padding-left: 0.5em;
+  white-space: nowrap;
+}
+.ticket__title {
+  margin: -8px 0 0;
+  font-size: clamp(26px, 9.2vw, 44px);
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: 0.04em;
+  text-align: center;
+  white-space: nowrap;
+}
+.ticket__title span { display: block; }
+.ticket__divider {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ticket__divider span { flex: 1; height: 1px; background: var(--ai); }
+.ticket__divider i { width: 7px; height: 7px; background: var(--ai); transform: rotate(45deg); }
+
+.photo {
+  position: relative;
+  align-self: stretch;
+  margin: 0;
+  aspect-ratio: var(--ar, 1.3333);
+  min-height: 150px;
+  background: var(--well);
+  border: 1px solid var(--ai);
+  display: grid;
+  place-items: center;
+}
+.photo.is-empty { border-style: dashed; }
+.photo__label {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  z-index: 1;
+  background: var(--ai);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  padding: 3px 5px 3px 9px;
+}
+.photo__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  display: block;
+}
+.photo__empty {
+  margin: 0;
+  padding: 0 14px;
+  color: var(--ai);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.ticket__foot {
+  align-self: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+}
+.expiry {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.expiry__label {
+  border: 1px solid var(--ai);
+  color: var(--ai);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.24em;
+  padding: 4px 4px 4px 8px;
+}
+.expiry__date {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+.sign {
+  margin: 0 0 0 auto;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.sign__name {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+}
+.seal {
+  position: relative;
+  flex: none;
+  width: 54px;
+  height: 54px;
+  margin-left: -8px;
+  border: 2px solid var(--shu);
+  border-radius: 50%;
+  box-shadow: inset 0.6px -0.6px 0 0.6px var(--shu);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--shu);
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1;
+  letter-spacing: 0;
+  transform: rotate(-7deg);
+  mix-blend-mode: multiply;
+}
+.seal span { display: block; }
+.seal::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  left: -2px;
+  border-radius: 50%;
+  background: linear-gradient(55deg, var(--fade-0) 50%, var(--fade-1) 100%);
+}
+
+/* ---------- stamps ---------- */
+.stamp {
+  position: absolute;
+  margin: 0;
+  color: var(--shu);
+  font-family: var(--font-ticket);
+  font-weight: 800;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.stamp--date {
+  top: -6px;
+  right: -10px;
+  width: clamp(84px, 26.5vw, 104px);
+  height: clamp(84px, 26.5vw, 104px);
+  border: 3px solid var(--shu);
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  font-size: clamp(12px, 3.85vw, 15px);
+  text-align: center;
+  transform: rotate(-12deg);
+}
+.stamp__top {
+  align-self: end;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  padding: 0 0 3px 0.12em;
+}
+.stamp__mid {
+  border-top: 2px solid var(--shu);
+  border-bottom: 2px solid var(--shu);
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+}
+.stamp__bot {
+  align-self: start;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  padding: 3px 0 0 0.2em;
+}
+.stamp--box {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  border: 6px double var(--shu);
+  padding: 4px 12px 4px 18px;
+  font-size: clamp(28px, 9.4vw, 42px);
+  line-height: 1.25;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+@keyframes stamp-in {
+  0% { opacity: 0; transform: rotate(-12deg) scale(1.6); }
+  55% { opacity: 1; transform: rotate(-12deg) scale(0.93); }
+  100% { opacity: 1; transform: rotate(-12deg) scale(1); }
+}
+.stamp--date.is-fresh { animation: stamp-in 0.36s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+
+/* ---------- buttons ---------- */
+.btn {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 4px;
+  min-height: 56px;
+  padding: 10px 16px;
+  font-family: var(--font-ui);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn--primary { background: var(--btn-bg); color: var(--btn-fg); }
+.btn--ghost {
+  background: transparent;
+  color: var(--btn-ghost-fg);
+  box-shadow: inset 0 0 0 1.5px var(--btn-ghost-line);
+}
+.btn--use {
+  width: 100%;
+  min-height: 68px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: inset 0 0 0 4px var(--btn-bg), inset 0 0 0 5px var(--btn-fg);
+  font-family: var(--font-ticket);
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  padding-left: calc(16px + 0.3em);
+}
+.btn:focus-visible { outline: 3px solid var(--fg); outline-offset: 3px; }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn svg { flex: none; }
+
+/* ---------- panels under the ticket ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.confirm {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 18px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.confirm__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  outline: none;
+}
+.confirm__text {
+  margin: 0;
+  font-size: 15px;
+  color: var(--fg-soft);
+}
+.confirm__actions {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.howto {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.howto li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.howto__text { min-width: 0; }
+.howto li::before {
+  content: counter(step);
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--fg-soft);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-ticket);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+.result {
+  text-align: center;
+  gap: 6px;
+}
+.result__title {
+  margin: 0 0 4px;
+  font-family: var(--font-ticket);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+}
+.result__text {
+  margin: 0;
+  font-size: 15px;
+  color: var(--fg-soft);
+  text-wrap: balance;
+}
+
+/* ---------- countdown dock ---------- */
+.dock {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin-inline: -16px;
+  padding: 0 16px calc(14px + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  box-shadow: var(--dock-shade);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dock__meter {
+  margin-inline: -16px;
+  height: 4px;
+  background: var(--hairline);
+  overflow: hidden;
+}
+.dock__meter i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--btn-bg);
+  transform-origin: left center;
+  transform: scaleX(var(--left, 1));
+}
+.dock.is-urgent .dock__meter i { background: var(--alert); }
+.dock__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.dock__time {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.dock__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--fg-soft);
+}
+.timer {
+  display: inline-flex;
+  font-family: var(--font-ticket);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.timer span { display: inline-block; width: 0.62em; text-align: center; }
+.timer .timer__colon { width: 0.34em; }
+.dock.is-urgent .timer { color: var(--alert); }
+.dock__note {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+.dock__note.is-alert { color: var(--alert); font-weight: 700; }
+.dock__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.dock__actions.is-two { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
+
+.test-note {
+  margin: 0;
+  padding: 10px 14px;
+  border: 1.5px dashed var(--alert);
+  border-radius: 6px;
+  color: var(--alert);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Japanese lines break between phrases, never inside a word or a name. */
+.ph { display: inline-block; }
+
+@media (max-width: 359px) {
+  .ticket__face { padding-inline: 12px; }
+  .ticket__kicker { gap: 8px; letter-spacing: 0.3em; }
+  .ticket__kicker-text { padding-left: 0.3em; }
+  .sign__name { font-size: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamp--date.is-fresh { animation: none; }
+  .btn:active { transform: none; }
+}
+</style>
+</head>
+<body>
+<main class="page" id="app" data-view="unused">
+  <p class="test-note"><span class="ph">テスト用のページです。</span><span class="ph">何度でも試せます。</span><span class="ph">奥様に渡すのは、</span><span class="ph">もう一つの本番用のページです。</span></p>
+
+  <header class="greeting">
+    <span class="greeting__mark" aria-hidden="true">祝</span>
+    <h1 class="greeting__title">誕生日おめでとう</h1>
+    <p class="greeting__sub">プレゼントは、この券です。</p>
+  </header>
+
+  <article class="ticket" id="ticket" aria-label="プレゼント券">
+    <div class="ticket__band">
+      <div class="ticket__face">
+        <p class="ticket__kicker"><span class="ticket__rule" aria-hidden="true"></span><span class="ticket__kicker-text">GIFT TICKET</span><span class="ticket__rule" aria-hidden="true"></span></p>
+        <p class="ticket__lead">10万円以下のもの、</p>
+        <h2 class="ticket__title"><span>なんでも一つ</span><span>買ってあげる券</span></h2>
+        <div class="ticket__divider" aria-hidden="true"><span></span><i></i><span></span></div>
+        <figure class="photo is-empty" id="photo">
+          <figcaption class="photo__label">欲しいもの</figcaption>
+          <img class="photo__img" id="photo-img" alt="撮影した、欲しいものの写真" hidden>
+          <p class="photo__empty" id="photo-empty"><span class="ph">撮った写真が、</span><span class="ph">ここに入ります</span></p>
+          <p class="stamp stamp--box" id="stamp-void" hidden>時間切れ</p>
+        </figure>
+        <div class="ticket__foot">
+          <p class="expiry"><span class="expiry__label">使用期限</span><span class="expiry__date">10月12日</span></p>
+          <p class="sign"><span class="sign__name">守屋真人</span><span class="seal" role="img" aria-label="守屋の印"><span aria-hidden="true">守</span><span aria-hidden="true">屋</span></span></p>
+        </div>
+        <p class="stamp stamp--date" id="stamp-used" hidden><span class="stamp__top">使用済</span><span class="stamp__mid" id="stamp-date"></span><span class="stamp__bot">守屋</span></p>
+      </div>
+    </div>
+  </article>
+
+  <section class="panel" id="panel-unused" aria-label="この券を使う">
+    <button type="button" class="btn btn--use" id="use-btn">使用する</button>
+    <div class="confirm" id="confirm" role="group" aria-labelledby="confirm-title" hidden>
+      <h2 class="confirm__title" id="confirm-title" tabindex="-1">カウントダウンを始めますか？</h2>
+      <p class="confirm__text"><span class="ph">始めると</span><span class="ph">止められません。</span><span class="ph">10分以内に、</span><span class="ph">欲しいものを</span><span class="ph">携帯のカメラで</span><span class="ph">撮ってください。</span></p>
+      <div class="confirm__actions">
+        <button type="button" class="btn btn--ghost" id="cancel-btn">まだ始めない</button>
+        <button type="button" class="btn btn--primary" id="start-btn">始める</button>
+      </div>
+    </div>
+    <ol class="howto">
+      <li><span class="howto__text"><span class="ph">「使用する」を押すと、</span><span class="ph">10分のカウントダウンが</span><span class="ph">始まります。</span></span></li>
+      <li><span class="howto__text"><span class="ph">10分以内に、</span><span class="ph">欲しいものを</span><span class="ph">携帯のカメラで</span><span class="ph">撮ってください。</span></span></li>
+      <li><span class="howto__text"><span class="ph">撮った写真が</span><span class="ph">券に入り、</span><span class="ph">使用済みになります。</span></span></li>
+    </ol>
+  </section>
+
+  <section class="panel result" id="panel-used" hidden>
+    <h2 class="result__title">使用済みです</h2>
+    <p class="result__text"><span class="ph"><span id="used-at"></span> に</span><span class="ph">使用しました。</span></p>
+    <p class="result__text"><span class="ph">この画面を、</span><span class="ph">発行者の守屋真人に</span><span class="ph">お見せください。</span></p>
+  </section>
+
+  <section class="panel result" id="panel-timeout" hidden>
+    <h2 class="result__title">時間切れです</h2>
+    <p class="result__text"><span class="ph">10分以内に</span><span class="ph">撮影されなかったため、</span><span class="ph">この券は</span><span class="ph">使えなくなりました。</span></p>
+    <p class="result__text"><span class="ph">発行者の守屋真人に</span><span class="ph">ご相談ください。</span></p>
+  </section>
+
+  <section class="panel result" id="panel-expired" hidden>
+    <h2 class="result__title">使用期限を過ぎました</h2>
+    <p class="result__text"><span class="ph">この券の使用期限は</span><span class="ph">10月12日でした。</span></p>
+  </section>
+
+  <div class="dock" id="dock" hidden>
+    <div class="dock__meter" aria-hidden="true"><i id="meter"></i></div>
+    <div class="dock__row">
+      <div class="dock__time">
+        <span class="dock__label" aria-hidden="true">残り</span>
+        <span class="timer" id="timer" role="timer" aria-label="残り10分0秒"><span>1</span><span>0</span><span class="timer__colon">:</span><span>0</span><span>0</span></span>
+      </div>
+      <p class="dock__note" id="dock-note"><span class="ph">10分以内に、</span><span class="ph">欲しいものを</span><span class="ph">撮ってください。</span></p>
+    </div>
+    <div class="dock__actions" id="dock-actions">
+      <button type="button" class="btn btn--ghost" id="retake-btn" hidden>撮り直す</button>
+      <button type="button" class="btn btn--primary" id="shoot-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"></path><circle cx="12" cy="13.2" r="3.6"></circle></svg>
+        カメラで撮る
+      </button>
+      <button type="button" class="btn btn--primary" id="decide-btn" hidden>この写真で決定</button>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn--ghost" id="test-reset">リセットして、もう一度試す</button>
+</main>
+
+<input type="file" id="camera-input" class="sr-only" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+<p class="sr-only" id="live" aria-live="polite"></p>
+
+<script>
+(function () {
+  "use strict";
+
+  // この数字を上げて公開し直すと、どの端末でも未使用の状態に戻ります。
+  var EDITION = 2;
+  var PREFIX = "nandemo-ken:";
+  var KEY = PREFIX + "e" + EDITION + ":";
+  var LIMIT_MS = 10 * 60 * 1000;                       // カウントダウン 10分
+  var GRACE_MS = 10 * 1000;                            // カメラから戻ってくるまでの猶予
+  var VALID_UNTIL = Date.UTC(2026, 9, 12, 15, 0, 0);   // 使用期限: 2026年10月12日の終わり（日本時間）
+
+  function $(id) { return document.getElementById(id); }
+  var app = $("app"), ticket = $("ticket");
+  var photoBox = $("photo"), photoImg = $("photo-img"), photoEmpty = $("photo-empty");
+  var stampUsed = $("stamp-used"), stampDate = $("stamp-date"), stampVoid = $("stamp-void");
+  var panelUnused = $("panel-unused"), panelUsed = $("panel-used"), panelTimeout = $("panel-timeout"), panelExpired = $("panel-expired");
+  var useBtn = $("use-btn"), confirmBox = $("confirm"), confirmTitle = $("confirm-title"), cancelBtn = $("cancel-btn"), startBtn = $("start-btn");
+  var dock = $("dock"), meter = $("meter"), timerEl = $("timer"), dockNote = $("dock-note"), dockActions = $("dock-actions");
+  var shootBtn = $("shoot-btn"), retakeBtn = $("retake-btn"), decideBtn = $("decide-btn");
+  var usedAtEl = $("used-at"), cameraInput = $("camera-input"), live = $("live");
+  var timerCells = timerEl.querySelectorAll("span");
+
+  var reduceMotion = false;
+  try { reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+
+  // ---- 保存（この端末のブラウザの中。使えないときはページを開いている間だけ覚える） ----
+  var mem = Object.create(null);
+  var store = {
+    get: function (name) {
+      if (name in mem) return mem[name];
+      try { return window.localStorage.getItem(KEY + name); } catch (e) { return null; }
+    },
+    set: function (name, value) {
+      mem[name] = value;
+      try { window.localStorage.setItem(KEY + name, value); return true; }
+      catch (e) {
+        try { window.localStorage.removeItem(KEY + name); } catch (e2) {}
+        return false;
+      }
+    },
+    del: function (name) {
+      delete mem[name];
+      try { window.localStorage.removeItem(KEY + name); } catch (e) {}
+    }
+  };
+
+  // 前の版の記録を片づける。
+  function dropOldEditions() {
+    try {
+      var ls = window.localStorage, old = [];
+      for (var i = 0; i < ls.length; i++) {
+        var k = ls.key(i);
+        if (k && k.indexOf(PREFIX) === 0 && k.indexOf(KEY) !== 0) old.push(k);
+      }
+      for (var j = 0; j < old.length; j++) ls.removeItem(old[j]);
+    } catch (e) {}
+  }
+
+  function blank() { return { status: "unused", startedAt: null, usedAt: null, ar: null }; }
+  function num(v) { return typeof v === "number" && isFinite(v) ? v : null; }
+  var state = blank();
+
+  function loadState() {
+    try {
+      var raw = store.get("state");
+      if (!raw) return;
+      var s = JSON.parse(raw);
+      if (!s || typeof s !== "object") return;
+      if (s.status === "counting" && num(s.startedAt) !== null) {
+        state = { status: "counting", startedAt: s.startedAt, usedAt: null, ar: num(s.ar) };
+      } else if (s.status === "used" && num(s.usedAt) !== null) {
+        state = { status: "used", startedAt: num(s.startedAt), usedAt: s.usedAt, ar: num(s.ar) };
+      } else if (s.status === "timeout") {
+        state = { status: "timeout", startedAt: num(s.startedAt), usedAt: null, ar: null };
+      }
+    } catch (e) {}
+  }
+  function saveState() { store.set("state", JSON.stringify(state)); }
+
+  // ---- 表示 ----
+  var busy = false;            // 写真を読み込み中
+  var cameraPending = false;   // カメラを開いていて、写真が戻ってくるかもしれない
+  var pendingTimer = 0;
+  var errorShown = false;      // 写真を読み込めなかった
+  var shownView = null;
+  var shownNote = null;
+
+  // 残り時間の横に出す案内（文節ごとに改行されるよう区切ってある。中身は固定の文だけ）
+  function phrases(parts) {
+    var html = "";
+    for (var i = 0; i < parts.length; i++) html += '<span class="ph">' + parts[i] + "</span>";
+    return html;
+  }
+  var NOTE_SHOOT = phrases(["10分以内に、", "欲しいものを", "撮ってください。"]);
+  var NOTE_CANDIDATE = phrases(["時間切れになると、", "この写真で", "決定されます。"]);
+  var NOTE_BUSY = phrases(["写真を", "読み込んでいます…"]);
+  var NOTE_ERROR = phrases(["写真を", "読み込めませんでした。", "もう一度", "撮ってください。"]);
+  var EMPTY_WAIT = phrases(["撮った写真が、", "ここに入ります"]);
+  var EMPTY_LOST = phrases(["写真を", "表示できません"]);
+  var lastTimerText = "";
+  var lastSaid = "";
+  var confirmShownAt = 0;
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function jst(ms) {
+    var d = new Date(ms + 9 * 60 * 60 * 1000);
+    return { y: d.getUTCFullYear(), mo: d.getUTCMonth() + 1, d: d.getUTCDate(), h: d.getUTCHours(), mi: d.getUTCMinutes() };
+  }
+  function formatDateTime(ms) { var p = jst(ms); return p.y + "年" + p.mo + "月" + p.d + "日 " + pad(p.h) + ":" + pad(p.mi); }
+  function formatStampDate(ms) { var p = jst(ms); return "'" + pad(p.y % 100) + "." + p.mo + "." + p.d; }
+
+  function say(text) {
+    live.textContent = "";
+    window.setTimeout(function () { live.textContent = text; }, 60);
+  }
+
+  function currentView(now) {
+    if (state.status === "counting" || state.status === "used" || state.status === "timeout") return state.status;
+    return now >= VALID_UNTIL ? "expired" : "unused";
+  }
+
+  function showConfirm(on) {
+    confirmBox.hidden = !on;
+    useBtn.hidden = on;
+    if (on) {
+      confirmShownAt = Date.now();
+      try { confirmTitle.focus({ preventScroll: true }); } catch (e) {}
+    }
+  }
+
+  function renderPhoto(view) {
+    var src = (view === "counting" || view === "used") ? store.get("photo") : null;
+    if (src) {
+      if (photoImg.getAttribute("src") !== src) photoImg.setAttribute("src", src);
+      photoImg.hidden = false;
+      photoEmpty.hidden = true;
+      photoBox.classList.remove("is-empty");
+      photoBox.style.setProperty("--ar", String(clamp(state.ar || 4 / 3, 0.75, 1.78)));
+    } else {
+      photoImg.hidden = true;
+      photoImg.removeAttribute("src");
+      photoBox.classList.add("is-empty");
+      photoBox.style.removeProperty("--ar");
+      photoEmpty.hidden = (view === "timeout" || view === "expired");
+      photoEmpty.innerHTML = view === "used" ? EMPTY_LOST : EMPTY_WAIT;
+    }
+  }
+
+  function renderDock() {
+    var has = !!store.get("photo");
+    shootBtn.hidden = has;
+    retakeBtn.hidden = !has;
+    decideBtn.hidden = !has;
+    dockActions.classList.toggle("is-two", has);
+    shootBtn.disabled = retakeBtn.disabled = decideBtn.disabled = busy;
+    var failed = !busy && errorShown;
+    var note = busy ? NOTE_BUSY : failed ? NOTE_ERROR : has ? NOTE_CANDIDATE : NOTE_SHOOT;
+    if (note !== shownNote) { shownNote = note; dockNote.innerHTML = note; }
+    dockNote.classList.toggle("is-alert", failed);
+  }
+
+  function paintTimer(rem) {
+    var secs = Math.ceil(rem / 1000);
+    var m = Math.floor(secs / 60), s = secs % 60;
+    var text = pad(m) + ":" + pad(s);
+    if (text !== lastTimerText) {
+      lastTimerText = text;
+      for (var i = 0; i < timerCells.length && i < text.length; i++) timerCells[i].textContent = text.charAt(i);
+      timerEl.setAttribute("aria-label", "残り" + m + "分" + s + "秒");
+      if ((secs === 300 || secs === 60) && lastSaid !== text) { lastSaid = text; say("残り" + m + "分です。"); }
+    }
+    meter.style.setProperty("--left", String(clamp(rem / LIMIT_MS, 0, 1)));
+    dock.classList.toggle("is-urgent", rem <= 60 * 1000);
+  }
+
+  function render() {
+    var view = currentView(Date.now());
+    shownView = view;
+    app.setAttribute("data-view", view);
+    panelUnused.hidden = view !== "unused";
+    panelUsed.hidden = view !== "used";
+    panelTimeout.hidden = view !== "timeout";
+    panelExpired.hidden = view !== "expired";
+    dock.hidden = view !== "counting";
+    if (view !== "unused") showConfirm(false);
+
+    renderPhoto(view);
+    stampUsed.hidden = view !== "used";
+    stampVoid.hidden = !(view === "timeout" || view === "expired");
+    stampVoid.textContent = view === "expired" ? "期限切れ" : "時間切れ";
+    if (view === "used") {
+      stampDate.textContent = formatStampDate(state.usedAt);
+      usedAtEl.textContent = formatDateTime(state.usedAt);
+    }
+    if (view === "counting") { renderDock(); tick(); }
+  }
+
+  function scrollTo(el, block) {
+    try { el.scrollIntoView({ block: block, behavior: reduceMotion ? "auto" : "smooth" }); } catch (e) {}
+  }
+
+  // ---- 画面を消さない（使える端末だけ） ----
+  var wake = null;
+  function keepAwake() {
+    try {
+      if (!navigator.wakeLock || document.hidden) return;
+      if (wake && !wake.released) return;
+      navigator.wakeLock.request("screen").then(function (lock) { wake = lock; }).catch(function () {});
+    } catch (e) {}
+  }
+  function releaseWake() {
+    try { if (wake) { wake.release().catch(function () {}); } } catch (e) {}
+    wake = null;
+  }
+
+  // ---- カウントダウン ----
+  function finalize(at) {
+    state = { status: "used", startedAt: state.startedAt, usedAt: at, ar: state.ar };
+    saveState();
+    errorShown = false;
+    releaseWake();
+    render();
+    stampUsed.classList.remove("is-fresh");
+    void stampUsed.offsetWidth;
+    stampUsed.classList.add("is-fresh");
+    say("使用済みになりました。");
+    scrollTo(ticket, "start");
+  }
+
+  function endByTimeout(deadline) {
+    if (store.get("photo")) { finalize(deadline); return; }
+    state = { status: "timeout", startedAt: state.startedAt, usedAt: null, ar: null };
+    saveState();
+    releaseWake();
+    render();
+    say("時間切れです。");
+    scrollTo(ticket, "start");
+  }
+
+  function tick() {
+    var now = Date.now();
+    if (state.status === "counting") {
+      var deadline = state.startedAt + LIMIT_MS;
+      var rem = Math.min(LIMIT_MS, deadline - now);
+      if (rem > 0) { paintTimer(rem); return; }
+      paintTimer(0);
+      if (busy) return;                                           // 読み込み中の写真を待つ
+      if (cameraPending && now < deadline + GRACE_MS) return;     // カメラから戻る写真を少しだけ待つ
+      endByTimeout(deadline);
+      return;
+    }
+    if (currentView(now) !== shownView) render();                 // 開いたまま使用期限をまたいだとき
+  }
+
+  // ---- 開始 ----
+  useBtn.addEventListener("click", function () { showConfirm(true); });
+  cancelBtn.addEventListener("click", function () {
+    showConfirm(false);
+    try { useBtn.focus({ preventScroll: true }); } catch (e) {}
+  });
+  startBtn.addEventListener("click", function () {
+    var now = Date.now();
+    if (now - confirmShownAt < 500) return;                       // 連打での押しまちがいを防ぐ
+    if (currentView(now) !== "unused") { render(); return; }
+    store.del("photo");
+    state = { status: "counting", startedAt: now, usedAt: null, ar: null };
+    saveState();
+    errorShown = false;
+    lastTimerText = "";
+    lastSaid = "";
+    render();
+    keepAwake();
+    say("カウントダウンを始めました。残り10分です。");
+    try { shootBtn.focus({ preventScroll: true }); } catch (e) {}
+  });
+
+  // ---- 撮影 ----
+  function openCamera() {
+    if (state.status !== "counting" || busy) return;
+    errorShown = false;
+    cameraPending = true;
+    window.clearTimeout(pendingTimer);
+    try { cameraInput.value = ""; } catch (e) {}
+    cameraInput.click();
+  }
+  shootBtn.addEventListener("click", openCamera);
+  retakeBtn.addEventListener("click", openCamera);
+
+  function loadFrom(src, cleanup) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () { resolve({ img: img, done: cleanup }); };
+      img.onerror = function () { cleanup(); reject(new Error("decode")); };
+      img.src = src;
+    });
+  }
+  function readAsDataUrl(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () { resolve(String(reader.result)); };
+      reader.onerror = function () { reject(new Error("read")); };
+      reader.readAsDataURL(file);
+    });
+  }
+  // まず端末内の一時URLで開き、だめなら中身を読み直して開く。
+  function loadImage(file) {
+    var viaReader = function () {
+      return readAsDataUrl(file).then(function (dataUrl) { return loadFrom(dataUrl, function () {}); });
+    };
+    var url = null;
+    try { url = URL.createObjectURL(file); } catch (e) {}
+    if (!url) return viaReader();
+    return loadFrom(url, function () { try { URL.revokeObjectURL(url); } catch (e) {} }).catch(viaReader);
+  }
+
+  function encode(img, maxSide, quality) {
+    var w = img.naturalWidth, h = img.naturalHeight;
+    if (!w || !h) throw new Error("empty");
+    var k = Math.min(1, maxSide / Math.max(w, h));
+    var cw = Math.max(1, Math.round(w * k)), ch = Math.max(1, Math.round(h * k));
+    var canvas = document.createElement("canvas");
+    canvas.width = cw;
+    canvas.height = ch;
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.drawImage(img, 0, 0, cw, ch);
+    var dataUrl = canvas.toDataURL("image/jpeg", quality);
+    if (!dataUrl || dataUrl.indexOf("data:image/jpeg") !== 0 || dataUrl.length < 200) throw new Error("encode");
+    return { dataUrl: dataUrl, w: cw, h: ch };
+  }
+
+  // 保存できる大きさになるまで小さくして券に入れる。保存できなくても、開いている間は表示する。
+  function keepPhoto(img) {
+    var tries = [[1280, 0.82], [960, 0.76], [640, 0.7]];
+    var shot = null;
+    for (var i = 0; i < tries.length; i++) {
+      shot = encode(img, tries[i][0], tries[i][1]);
+      if (store.set("photo", shot.dataUrl)) break;
+    }
+    state.ar = shot.w / shot.h;
+    saveState();
+  }
+
+  function onPicked() {
+    cameraPending = false;
+    window.clearTimeout(pendingTimer);
+    var file = cameraInput.files && cameraInput.files[0];
+    if (!file || state.status !== "counting") { tick(); return; }
+    if (Date.now() > state.startedAt + LIMIT_MS + GRACE_MS) { tick(); return; }
+    busy = true;
+    errorShown = false;
+    renderDock();
+    loadImage(file).then(function (loaded) {
+      try {
+        if (state.status === "counting") {
+          keepPhoto(loaded.img);
+          say("写真が券に入りました。");
+        }
+      } finally { loaded.done(); }
+    }).catch(function () {
+      if (state.status === "counting") errorShown = true;
+    }).then(function () {
+      busy = false;
+      if (state.status !== "counting") return;
+      renderPhoto("counting");
+      renderDock();
+      if (!errorShown) scrollTo(photoBox, "center");
+      tick();
+    });
+  }
+  cameraInput.addEventListener("change", onPicked);
+  cameraInput.addEventListener("cancel", function () {
+    cameraPending = false;
+    window.clearTimeout(pendingTimer);
+    tick();
+  });
+
+  decideBtn.addEventListener("click", function () {
+    if (state.status !== "counting" || busy || !store.get("photo")) return;
+    finalize(Math.min(Date.now(), state.startedAt + LIMIT_MS));
+  });
+
+  // ページに戻ってきたとき: 時間を合わせ直す。カメラを閉じただけなら、待つのをやめる。
+  function onBack() {
+    if (cameraPending) {
+      window.clearTimeout(pendingTimer);
+      pendingTimer = window.setTimeout(function () { cameraPending = false; tick(); }, 2500);
+    }
+    if (state.status === "counting") keepAwake();
+    tick();
+  }
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) onBack(); });
+  window.addEventListener("focus", onBack);
+  window.addEventListener("pageshow", onBack);
+
+  // 同じ端末の別のタブで券が使われたら、こちらの表示も合わせる。
+  window.addEventListener("storage", function (event) {
+    if (busy || !event.key || event.key.indexOf(KEY) !== 0) return;
+    delete mem.state;
+    delete mem.photo;
+    state = blank();
+    loadState();
+    lastTimerText = "";
+    render();
+  });
+
+  // ---- テスト用: 未使用に戻す ----
+  $("test-reset").addEventListener("click", function () {
+    store.del("photo");
+    store.del("state");
+    state = blank();
+    busy = false;
+    cameraPending = false;
+    window.clearTimeout(pendingTimer);
+    errorShown = false;
+    lastTimerText = "";
+    releaseWake();
+    render();
+    say("未使用に戻しました。");
+    scrollTo(app, "start");
+  });
+
+  // ---- 起動 ----
+  dropOldEditions();
+  loadState();
+  render();
+  window.setInterval(tick, 250);
+  if (state.status === "counting") keepAwake();
+})();
+</script>
+</body>
+</html>
